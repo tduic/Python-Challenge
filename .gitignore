@@ -1,0 +1,6 @@
+env/bin/*
+env/channel/*
+env/include/*
+env/lib/*
+env/*.zip
+.DS_store
