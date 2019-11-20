@@ -21,25 +21,6 @@ data = pickle.load(urllib.request.urlopen("http://www.pythonchallenge.com/pc/def
 for line in data:
     print("".join([k * v for k,v in line]))
 
-def challenge4Wrapper(url):
-    num = 0
-    def challenge4(origURL, num):
-        print(num, origURL)
-        response = requests.get(origURL)
-        resp = response.text
-        nothing = ''
-        for c in resp:
-            if c in string.digits:
-                nothing += c
-        url = "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=" + nothing
-        if num == 400:
-            return nothing
-        num += 1
-        challenge4(url, num)
-    return challenge4(url, num)
-
-print(challenge4Wrapper(url))
-
 
 def readFile(path):
     print(path)
