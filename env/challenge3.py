@@ -3,7 +3,7 @@ import string
 
 def challenge3(path):
     # Write your code here
-    text = readFile(path)
+    text = readFile(path, "rt")
 
     res = ''
     for i in range(3, len(text)-3):

@@ -1,29 +1,21 @@
 import requests
-import string
+import re
 
-def challenge4Wrapper(nothing):
-
-    def challenge4(origNothing):
-        template = "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing="
-        response = requests.get(template + origNothing)
+def challenge4(origNothing):
+    template = "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing="
+    nothing = origNothing
+    while True:
+        response = requests.get(template + nothing)
         resp = response.text
-        nothing = ''
-
-        for c in resp:
-            if c in string.digits:
-                nothing += c
-
-        if len(nothing) < 3 or 6 < len(nothing):
-            return origNothing
-
-        return challenge4(nothing)
-
-    return challenge4(nothing)
+        print(resp)
+        match = re.search("and the next nothing is (\d+)", resp)
+        if match == None:
+            break
+        nothing = match.group(1)
+    return None
 
 if __name__ == '__main__':
     nothing1 = "12345"
-    print(challenge4Wrapper(nothing1))
     nothing2 = "8022"
-    print(challenge4Wrapper(nothing2))
-    nothing3 = "63579"
-    print(challenge4Wrapper(nothing3))
+    print(challenge4(nothing2))
+
