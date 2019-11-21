@@ -6,46 +6,25 @@ def challenge7(url):
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
     data = list(img.getdata())
-    gray = []
-    i = 0
-    y = data[0][0]
-    s = ''
-    print(string.printable)
-    for p in data:
-        if (p[0] == p[1] == p[2]) and (y == p[0]):
-            i+=1
-        else:
-            if chr(y) in string.printable:
-                s += chr(y)*((i+2)//6)
-        i = 0
-        y = p[0]
-    print(s)
+    w, h = img.size
+    data = [data[i * w:(i + 1) * w] for i in range(h)]
 
+    grayData = []
+    grayH = range(43, 52) # gray boxes are only from h=43 to h=51
+    grayW = range(0, 609, 7) # each box is 7px tall and they range from w=0 to w=608
+    for i in grayH:
+        for j in grayW:
+            grayData.append(data[i][j])
 
-    # i = 0
-    # y = data[0][0]
-    # s = ''
-    # for x in data:
-    #     if (x[0] == x[1] == x[2]) and (y == x[0]): #a grey pixel and same as last pixel
-    #         i+=1
-    #     else:
-    #         if chr(y) in (string.printable):
-    #             s+=chr(y)*((i+2)//6) # make every dot 6 pixels wide
-    #                                 # and show first only 4 pixels wide ‘s’ dot
-    #     i = 0
-    #     y = x[0]
-    #     print(s)
-    # bytestr = img.tobytes()
-    # res = ''
-    # for b in bytestr:
-    #     c = chr(b)
-    #     if c in string.ascii_letters:
-    #         res += c
-    # ans = ''
-    # for i in range(len(res)-4):
-    #     if res[i] == res[i+1] and res[i] == res[i+2] and res[i] == res[i+3]:
-    #         ans += res[i]
-    return None
+    res = ''
+    for p in grayData:
+        res += chr(p[0])
+
+    ans = ''
+    numList = [105, 110, 116, 101, 103, 114, 105, 116, 121] # retrieved from response to above
+    for num in numList:
+        ans += chr(num)
+    return ans
 
 
 if __name__ == '__main__':

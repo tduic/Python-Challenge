@@ -13,4 +13,4 @@ def challenge3(path):
     return res
 
 if __name__ == '__main__':
-    print(challenge3('challenge3.txt'))
+    print(challenge3('txt/challenge3.txt'))

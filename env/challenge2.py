@@ -10,4 +10,4 @@ def challenge2(path):
     return res
 
 if __name__ == '__main__':
-    print(challenge2("challenge2.txt"))
+    print(challenge2("txt/challenge2.txt"))
