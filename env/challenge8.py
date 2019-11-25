@@ -1,6 +1,5 @@
 import requests
 import re
-from lxml import html
 import codecs
 import bz2
 
