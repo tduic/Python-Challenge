@@ -1,4 +1,5 @@
 from utils import readFile
+
 import string, re
 
 def challenge3(path):
