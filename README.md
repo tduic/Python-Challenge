@@ -1,69 +1,53 @@
-# AlgoTrading_TD
+# Python-Challenge
 
-A local Python script for analyzing options trading opportunities through the TD Ameritrade API. It scans a TD Ameritrade watchlist, computes volatility metrics for each underlying, and evaluates the profit/loss profiles of common options strategies.
+My solutions to [The Python Challenge](http://www.pythonchallenge.com/), a series of riddle-style programming puzzles where each level is solved by writing a small Python script, and the answer reveals the URL of the next level.
 
-Unlike the related serverless [`AlgoTrading_Chalice`](https://github.com/tduic/AlgoTrading_Chalice) webhook bot, this project runs locally as a command-line script driven by `main.py`.
+This repo covers levels 0 through 17. Each level lives in its own script under `env/`, and the puzzle assets (images, text, pickled data) it operates on are kept in `env/txt/`.
 
-## Features
+## What's inside
 
-- **Watchlist scanning** — pulls a configured TD Ameritrade watchlist ("AlgoList") and gathers quotes and fundamentals (beta, average volume) for each symbol.
-- **Volatility analysis**:
-  - Historical volatility computed from daily price history (annualized standard deviation of log returns).
-  - Implied volatility and IV percentile scraped from the thinkorswim web platform via Selenium.
-- **Strategy evaluation** (`utils/optionPnl.py`) — calculates breakeven, max gain, max loss, and current P&L for:
-  - Covered call
-  - Married put
-  - Iron condor
-  - Long strangle
-- **Straddle screening** (`main.py`) — filters watchlist assets by historical volatility and IV percentile, then surfaces viable near-the-money call/put pairs based on a delta/theta and volatility filter.
-- **Order helpers** — login flow and order placement scaffolding using `tda-api`'s options order builders (order execution is currently stubbed/commented in `main.py`).
+Each `env/challengeNN.py` file defines a `challengeN(...)` function and a small `__main__` block that runs it. The puzzles exercise a broad range of standard-library and third-party techniques, for example:
 
-## Tech stack
+- **challenge0** - arithmetic (`2**38`).
+- **challenge01** - Caesar/ROT cipher decoding with `str.maketrans` / `str.translate`.
+- **challenge02 / challenge03** - text filtering and regex extraction (`re`, `string`).
+- **challenge04** - following a chain of HTTP redirects via `requests` and regex.
+- **challenge05** - loading a remote pickled "banner" with `pickle` + `urllib` and rendering it.
+- **challenge08** - extracting and `bz2`-decompressing credentials hidden in an HTML comment.
+- **challenge11 / challenge14 / challenge16 / challenge17** - pixel-level image processing with **Pillow (PIL)** (deinterlacing, unrolling a spiral, GIF/image manipulation).
 
-- Python 3.7
-- [`tda-api` / `tdameritrade`](https://pypi.org/project/tdameritrade/) — TD Ameritrade REST client and OAuth
-- Selenium + `webdriver-manager` (Chrome) — automated login and scraping IV / IV percentile from thinkorswim
+Helper file `env/utils.py` provides small `readFile` / `writeFile` wrappers used by several challenges.
 
-## Project structure
+## Layout
 
-```
-main.py                 # entry point: scan watchlist, run straddle logic
-actions/login.py        # TD Ameritrade OAuth login (token file or Selenium login flow)
-utils/constants.py      # environment-driven config and trade constants
-utils/helpers.py        # volatility math, option symbol/date helpers, IV scraping
-utils/optionPnl.py      # P&L calculators for options strategies
-utils/strategies.py     # scratch/experimental
-requirements.txt
-```
+\`\`\`
+env/
+  challenge0.py ... challenge17.py   # one script per puzzle level
+  utils.py                           # file read/write helpers
+  txt/                               # puzzle inputs/assets (jpg, png, gif, txt, pickled data)
+\`\`\`
 
-## Setup
+## Requirements
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-   You will also need `selenium` and `webdriver-manager` for the login flow and IV scraping, plus Google Chrome installed.
+- Python 3.7+
+- [\`requests\`](https://pypi.org/project/requests/) (network challenges)
+- [\`Pillow\`](https://pypi.org/project/Pillow/) (image challenges)
 
-2. Set the required environment variables:
+\`\`\`bash
+pip install requests Pillow
+\`\`\`
 
-   | Variable | Description |
-   | --- | --- |
-   | `TDAMERITRADE_CLIENT_ID` | TD Ameritrade developer app client ID (the `@AMER.OAUTHAP` suffix is added automatically) |
-   | `TDAMERITRADE_TOKEN_PATH` | Path where the OAuth token file is stored |
-   | `TDAMERITRADE_REDIRECT_URI` | OAuth redirect URI registered for your app |
-   | `TDAMERITRADE_ACCOUNT_ID` | TD Ameritrade account ID |
-   | `TDAMERITRADE_ALGOLIST_ID` | ID of the watchlist to scan |
+## Running
 
-3. For IV scraping, create a `.login` pickle file containing your thinkorswim credentials (`username`, `password`, and security-question answers) as expected by `impliedVolatility()` in `utils/helpers.py`.
+Run an individual challenge from inside the \`env\` directory (the scripts use paths relative to \`env/\`, e.g. \`txt/...\`):
 
-## Usage
+\`\`\`bash
+cd env
+python challenge02.py
+\`\`\`
 
-```bash
-python main.py
-```
+Network-based challenges (4, 5, 8, ...) fetch data live from \`pythonchallenge.com\`, so they require an internet connection.
 
-On first run, if no token file exists, a Chrome window opens to complete the TD Ameritrade OAuth login flow and persist a token. Subsequent runs reuse the saved token. The script then scans the watchlist, computes volatility, and prints viable straddle candidates.
+## Notes
 
-## Disclaimer
-
-This is a personal/experimental project for educational purposes. It is not financial advice. Trading options involves substantial risk; use at your own risk.
+These are personal solutions / learning exercises. Some later levels are partial or stubbed.
